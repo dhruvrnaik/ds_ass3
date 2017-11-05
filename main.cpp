@@ -17,5 +17,8 @@ int main() {
     cout << "Quotient: ";
     q.display();
     cout << "Remainder: ";
+    if(b.head->exp > a.head->exp ||((b.head->exp == a.head->exp)&&(b.head->coef > a.head->coef)))
     a.display();
+    else
+    b.display();
 }

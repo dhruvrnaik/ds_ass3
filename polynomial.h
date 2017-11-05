@@ -144,6 +144,12 @@ public:
 	//the final value of p acts as the remainder
     friend Polynomial<T> divide(Polynomial* p, Polynomial* q) {
 		Polynomial<T> Q;
+		if(q->head->exp > p->head->exp ||((q->head->exp == p->head->exp)&&(q->head->coef > p->head->coef)) ){
+
+			Polynomial<T> *temp = p;
+			p=q;
+			q=temp;
+		}
 		while(q->head->exp <= p->head->exp) {
 			double mTempCoef = p->head->coef / q->head->coef;
 			double mTempExp = p->head->exp - q->head->exp;
