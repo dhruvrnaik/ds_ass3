@@ -23,19 +23,17 @@ public:
 	Polynomial() {
 		head = NULL;
 	}
-
+	
 
 	//function to delete the current head node
 	void delete_b() {
-        if(head->next == NULL){
-            head->coef=0;
-            head->exp=0;
-            return;
-        }
+		if(head->next == NULL) {
+			head->coef = head->exp = 0;
+			return;
+		}
 		Node<T>* x = head;
 		head = head->next;
 		delete x;
-
 	}
 
 	//function to delete a node with a known value of exp
@@ -54,7 +52,7 @@ public:
 			}
 			p = p->next;
 			q = q->next;
-		}
+		}	
 	}
 
 	//function to insert nodes in decreasing order of exp
@@ -65,10 +63,10 @@ public:
 			head = new Node<T>(coef, exp);
 			return;
         }
-
-        if(coef == 0)
+		
+        if(coef == 0) 
             return;
-
+		
 		Node<T>* tmp = new Node<T>(coef, exp);
 
 		if(exp == head->exp) {
@@ -76,14 +74,14 @@ public:
 			if(head->coef == 0)
 				deleteN(head->exp);
 			return;
-		}
+		}		
 
 		if(exp > head->exp) {
 			tmp->next = head;
 			head = tmp;
 			return;
 		}
-
+		
 		Node<T>* prev = head;
 		Node<T>* cur = head->next;
 		while(cur != NULL) {
@@ -102,7 +100,7 @@ public:
 			}
 			prev = cur;
 			cur = cur->next;
-		}
+		}			
 		prev->next = tmp;
 	}
 
@@ -122,9 +120,37 @@ public:
 		}
 	}
 
+	//Overloading > operator for comparing two polynomials
+	friend bool operator>(Polynomial<T> x , Polynomial<T> y) {
+		Node<T>* xHead = x.head;
+		Node<T>* yHead = y.head;
+		char firstGT = '0';
+		while(xHead != NULL || yHead != NULL) {
+			if(xHead == NULL)
+				return true;
+			if(yHead == NULL)
+				return true;
+			
+			if(xHead->exp > yHead->exp)
+				return true;
+			if(xHead->exp < yHead->exp)
+				return false;
+
+			if(firstGT == '0') {
+				firstGT = (xHead->coef > yHead->coef) ? '1' : '2';
+			}
+
+			xHead = xHead->next;
+			yHead = yHead->next;
+		}
+		if(firstGT == '0')
+			return true;
+		return firstGT == '1';
+	}
+	
 	//function to multiply two polynomials
 	//returns the product of two input polynomials - p and q
-	friend Polynomial<T> multiply(Polynomial* p, Polynomial* q) {
+	friend Polynomial<T> multiply(Polynomial<T>* p, Polynomial<T>* q) {
 		Polynomial<T> r;
 		Node<T>* a = p->head;
 		while(a != NULL) {
@@ -142,14 +168,8 @@ public:
 	//returns the quotient obtained on division of p by q
 	//modifies the value of p at each step
 	//the final value of p acts as the remainder
-    friend Polynomial<T> divide(Polynomial* p, Polynomial* q) {
+    friend Polynomial<T> divide(Polynomial<T>* p, Polynomial<T>* q) {
 		Polynomial<T> Q;
-		if(q->head->exp > p->head->exp ||((q->head->exp == p->head->exp)&&(q->head->coef > p->head->coef)) ){
-
-			Polynomial<T> *temp = p;
-			p=q;
-			q=temp;
-		}
 		while(q->head->exp <= p->head->exp) {
 			double mTempCoef = p->head->coef / q->head->coef;
 			double mTempExp = p->head->exp - q->head->exp;
@@ -157,23 +177,21 @@ public:
 			Node<T>* qHead = q->head;
 			while(qHead != NULL) {
 				p->insert(mTempCoef * qHead->coef * -1, mTempExp + qHead->exp);
-				//p->display();
-				//if(qHead == NULL)
-                  //  break;
-                qHead = qHead->next;
-
+				// if(qHead == NULL)
+				// 	break;
+				qHead = qHead->next;
 			}
 		}
 		return Q;
 	}
-
+	
 	//function to display the polynomial
 	void display() {
 		if(head == NULL) {
 			cout << "0" << endl;
 			return;
 		}
-
+		
 		Node<T>* tmp = head;
 		do {
             if(tmp->exp != 0) {
@@ -185,7 +203,7 @@ public:
                     tmp = tmp->next;
                     continue;
                 }
-
+                
                 if(tmp->coef < 0) {
                     if(tmp->coef == -1)
                         cout << "-x^" << tmp->exp;

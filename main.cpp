@@ -9,6 +9,13 @@ int main() {
     cout << "Enter second polynomial:" << endl;
     b.input();
     Polynomial<double> p = multiply(&a,&b);
+    bool swapped = false;
+    if(b > a) {
+        Polynomial<double> tmp = b;
+        b = a;
+        a = tmp;
+        swapped = true;
+    }
     Polynomial<double> q = divide(&a,&b);
 
     cout << "Product: ";
@@ -17,8 +24,5 @@ int main() {
     cout << "Quotient: ";
     q.display();
     cout << "Remainder: ";
-    if(b.head->exp > a.head->exp ||((b.head->exp == a.head->exp)&&(b.head->coef > a.head->coef)))
     a.display();
-    else
-    b.display();
 }
